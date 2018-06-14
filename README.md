@@ -44,7 +44,8 @@ int main(int argc, char *argv[])
   FramelessWindow framelessWindow;
   //framelessWindow.setWindowState(Qt::WindowMaximized);
   //framelessWindow.setWindowTitle("test title");
-
+  //framelessWindow.setWindowIcon(a.style()->standardIcon(QStyle::SP_DesktopIcon));
+  
   // create our mainwindow instance
   MainWindow *mainWindow = new MainWindow;
 
@@ -79,7 +80,7 @@ Many thanks goes to the [Qt Forum](https://forum.qt.io/topic/80654/how-to-create
 ## Licence
 > The MIT License
 >
-> Copyright (c) 2017, Juergen Skrotzky (https://github.com/Jorgen-VikingGod, JorgenVikingGod@gmail.com)
+> Copyright (c) 2018, Juergen Skrotzky (https://github.com/Jorgen-VikingGod, JorgenVikingGod@gmail.com)
 >
 > Permission is hereby granted, free of charge, to any person obtaining a copy
 > of this software and associated documentation files (the "Software"), to deal

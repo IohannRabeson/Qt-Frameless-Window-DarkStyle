@@ -14,9 +14,37 @@
 #ifndef FRAMELESSWINDOW_H
 #define FRAMELESSWINDOW_H
 
-#include "ui_framelesswindow.h"
+#include <QEvent>
+#include <QtWidgets>
 
-class FramelessWindow: public QWidget, private Ui::FramelessWindow
+namespace Ui {
+  class FramelessWindow;
+}
+
+class MouseButtonSignaler: public QObject
+{
+  Q_OBJECT
+
+public:
+  MouseButtonSignaler(QObject * parent = 0) : QObject(parent) {}
+  void installOn(QWidget * widget) { widget->installEventFilter(this); }
+
+protected:
+  virtual bool eventFilter(QObject * obj, QEvent * ev) Q_DECL_OVERRIDE {
+    if ((   ev->type() == QEvent::MouseButtonPress
+         || ev->type() == QEvent::MouseButtonRelease
+         || ev->type() == QEvent::MouseButtonDblClick)
+        && obj->isWidgetType()) {
+      emit mouseButtonEvent(static_cast<QWidget*>(obj),
+                            static_cast<QMouseEvent*>(ev));
+    }
+    return false;
+  }
+signals:
+  void mouseButtonEvent(QWidget *, QMouseEvent *);
+};
+
+class FramelessWindow: public QWidget
 {
   Q_OBJECT
 
@@ -27,8 +55,14 @@ public:
 private:
   void styleWindow(bool bActive, bool bNoState);
 
+signals:
+  void windowIconLeftClicked();
+  void windowIconRightClicked();
+  void windowIconDblClick();
+
 public slots:
   void setWindowTitle(const QString &text);
+  void setWindowIcon(const QIcon &ico);
 
 private slots:
   void on_applicationStateChanged(Qt::ApplicationState state);
@@ -40,6 +74,9 @@ private slots:
 
 protected:
   virtual void changeEvent(QEvent *event);
+
+private:
+  Ui::FramelessWindow *ui;
 
 protected:
   QHBoxLayout contentLayout;
